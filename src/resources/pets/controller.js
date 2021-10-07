@@ -28,6 +28,23 @@ const createOne = async (req, res) => {
   }
 };
 
+const getAll = async (req, res) => {
+  try {
+    const getAllSql = `
+    SELECT *
+    FROM pets
+    `;
+    const result = await db.query(getAllSql);
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error("[ERROR] getAll: ", { error: error.message });
+
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createOne,
+  getAll,
 };
