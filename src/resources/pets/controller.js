@@ -44,7 +44,26 @@ const getAll = async (req, res) => {
   }
 };
 
+const getOneById = async (req, res) => {
+  const getOneByIdSql = `
+  SELECT *
+  FROM pets
+  WHERE id = $1
+  `;
+
+  try {
+    const result = await db.query(getOneByIdSql, [req.params.id]);
+
+    res.json(result.rows[0]);
+  } catch (error) {
+    console.error("[ERROR] getOneById: ", { error: error.message });
+
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createOne,
   getAll,
+  getOneById,
 };
