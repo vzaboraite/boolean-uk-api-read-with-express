@@ -42,7 +42,7 @@ const getAll = async (req, res) => {
   try {
     const result = await db.query(getAllSql);
 
-    res.json(result.rows);
+    res.json({ data: result.rows });
   } catch (error) {
     console.error("[ERROR] getAll: ", { error: error.message });
 
@@ -60,9 +60,9 @@ const getOneById = async (req, res) => {
   `;
 
   try {
-    const result = await db.query(getOneByIdSql, [req.params.id]);
+    const result = await db.query(getOneByIdSql, [id]);
 
-    res.json(result.rows[0]);
+    res.json({ data: result.rows[0] });
   } catch (error) {
     console.error("[ERROR] getOneById: ", { error: error.message });
 
@@ -80,7 +80,7 @@ const getFiction = async (req, res) => {
   try {
     const result = await db.query(getFictionSql);
 
-    res.json(result.rows);
+    res.json({ data: result.rows });
   } catch (error) {
     console.error({ error: error.message });
 
