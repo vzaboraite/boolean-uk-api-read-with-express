@@ -88,9 +88,27 @@ const getFiction = async (req, res) => {
   }
 };
 
+const getNonFiction = async (req, res) => {
+  const getNonFictionSql = `
+    SELECT *
+    FROM books
+    WHERE type = 'Non-Fiction'
+  `;
+
+  try {
+    const result = await db.query(getNonFictionSql);
+
+    res.json({ data: result.rows });
+  } catch (error) {
+    console.error({ error: error.message });
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createOne,
   getAll,
   getOneById,
   getFiction,
+  getNonFiction,
 };
