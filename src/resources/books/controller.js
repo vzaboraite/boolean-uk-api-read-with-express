@@ -70,8 +70,27 @@ const getOneById = async (req, res) => {
   }
 };
 
+const getFiction = async (req, res) => {
+  const getFictionSql = `
+    SELECT * 
+    FROM books
+    WHERE type = 'Fiction'
+  `;
+
+  try {
+    const result = await db.query(getFictionSql);
+
+    res.json(result.rows);
+  } catch (error) {
+    console.error({ error: error.message });
+
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createOne,
   getAll,
   getOneById,
+  getFiction,
 };
