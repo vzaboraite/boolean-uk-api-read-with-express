@@ -1,3 +1,4 @@
+const { capitalize } = require("../../utils/StringUtils");
 const db = require("../../utils/database");
 
 const createOne = async (req, res) => {
@@ -123,10 +124,41 @@ const getNonFiction = async (req, res) => {
   }
 };
 
+const getAuthorBooks = async (req, res) => {
+  const { name } = req.params;
+  const nameCapitalized = capitalize(name);
+
+  const { order } = req.query;
+
+  let getAuthorSql = `
+  SELECT *
+  FROM books
+  WHERE author = $1
+  `;
+
+  if (order === "recent") {
+    getAuthorSql = `
+    ${getAuthorSql}
+    ORDER BY publicationDate DESC
+    `;
+  }
+
+  try {
+    const result = await db.query(getAuthorSql, [nameCapitalized]);
+
+    res.json({ data: result.rows });
+  } catch (error) {
+    console.error({ error: error.message });
+
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createOne,
   getAll,
   getOneById,
   getFiction,
   getNonFiction,
+  getAuthorBooks,
 };

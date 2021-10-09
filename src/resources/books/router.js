@@ -6,6 +6,7 @@ const {
   getOneById,
   getFiction,
   getNonFiction,
+  getAuthorBooks,
 } = require("./controller");
 
 const router = express.Router();
@@ -17,6 +18,8 @@ router.get("/", getAll);
 router.get("/fiction", getFiction);
 
 router.get("/non-fiction", getNonFiction);
+
+router.get("/author/:name", getAuthorBooks);
 
 router.get("/:id", getOneById);
 
