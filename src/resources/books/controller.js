@@ -73,26 +73,21 @@ const getOneById = async (req, res) => {
 const getFiction = async (req, res) => {
   const { topic } = req.query;
 
-  const getFictionSql = `
+  let getFictionSql = `
     SELECT * 
     FROM books
     WHERE type = 'Fiction'
   `;
 
-  const getFictionWithTopicSql = `
-  SELECT *
-  FROM books
-  WHERE type = 'Fiction'
-  AND topic = $1
-  `;
+  if (topic) {
+    getFictionSql = `
+    ${getFictionSql} 
+    AND topic = '${topic}'
+    `;
+  }
 
   try {
-    let result = null;
-    if (topic) {
-      result = await db.query(getFictionWithTopicSql, [topic]);
-    } else {
-      result = await db.query(getFictionSql);
-    }
+    const result = await db.query(getFictionSql);
 
     res.json({ data: result.rows });
   } catch (error) {
