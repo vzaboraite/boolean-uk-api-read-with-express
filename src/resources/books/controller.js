@@ -98,11 +98,20 @@ const getFiction = async (req, res) => {
 };
 
 const getNonFiction = async (req, res) => {
-  const getNonFictionSql = `
+  const { topic } = req.query;
+
+  let getNonFictionSql = `
     SELECT *
     FROM books
     WHERE type = 'Non-Fiction'
   `;
+
+  if (topic) {
+    getNonFictionSql = `
+    ${getNonFictionSql} 
+    AND topic = '${topic}'
+    `;
+  }
 
   try {
     const result = await db.query(getNonFictionSql);
