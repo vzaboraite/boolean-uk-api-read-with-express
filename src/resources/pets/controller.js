@@ -31,11 +31,20 @@ const createOne = async (req, res) => {
 };
 
 const getAll = async (req, res) => {
+  const { microchip } = req.query;
+  let getAllSql = `
+  SELECT *
+  FROM pets
+  `;
+
+  if (microchip) {
+    getAllSql = `
+  ${getAllSql}
+  WHERE microchip = false
+  `;
+  }
+
   try {
-    const getAllSql = `
-    SELECT *
-    FROM pets
-    `;
     const result = await db.query(getAllSql);
 
     res.json(result.rows);
