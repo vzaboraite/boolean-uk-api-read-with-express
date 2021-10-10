@@ -80,9 +80,30 @@ const getTypes = async (req, res) => {
   }
 };
 
+const getPetsOfType = async (req, res) => {
+  const { type } = req.params;
+
+  const getPetsOfTypeSQL = `
+  SELECT * 
+  FROM pets 
+  WHERE type= $1
+  `;
+
+  try {
+    const result = await db.query(getPetsOfTypeSQL, [type]);
+
+    res.json({ data: result.rows });
+  } catch (error) {
+    console.error({ error: error.message });
+
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createOne,
   getAll,
   getOneById,
   getTypes,
+  getPetsOfType,
 };
