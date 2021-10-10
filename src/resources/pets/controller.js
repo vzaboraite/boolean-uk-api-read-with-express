@@ -1,5 +1,6 @@
 const { ReadyForQueryMessage } = require("pg-protocol/dist/messages");
 const db = require("../../utils/database");
+const { splitAndJoin } = require("../../utils/StringUtils");
 
 const createOne = async (req, res) => {
   console.log("Pets Router [CREATE]", { body: req.body });
@@ -81,6 +82,9 @@ const getTypes = async (req, res) => {
 };
 
 const getPetsOfType = async (req, res) => {
+  const { breed } = req.query;
+  const splittedAndJoinedBreed = splitAndJoin(breed);
+
   const { type } = req.params;
 
   const getPetsOfTypeSQL = `
@@ -89,8 +93,36 @@ const getPetsOfType = async (req, res) => {
   WHERE type= $1
   `;
 
+  const getPetsOfTypeAndBreedSQL = `
+  SELECT * 
+  FROM pets
+  WHERE breed ILIKE $1
+  `;
+
+  /* 
+  TODO: Figure out how to fix case-sensitivity in database `breed` column's values like:
+    - Grand Anglo-Français Blanc et Orange
+    - Xiasi Dog
+    - ara
+    - LaPerm
+    - Champagne D’Argent 
+
+  Q: Should there be used regexp?
+
+  S: 1. Used ILIKE in SQL template to ingnore case-sensitivity
+     2. Used splitAndJoin() from utils to work with query values(works just with simple value examples, 
+      doesn't work with cases where breed name includes `-`)
+ */
+
   try {
-    const result = await db.query(getPetsOfTypeSQL, [type]);
+    let result = null;
+    if (splittedAndJoinedBreed) {
+      result = await db.query(getPetsOfTypeAndBreedSQL, [
+        splittedAndJoinedBreed,
+      ]);
+    } else {
+      result = await db.query(getPetsOfTypeSQL, [type]);
+    }
 
     res.json({ data: result.rows });
   } catch (error) {
