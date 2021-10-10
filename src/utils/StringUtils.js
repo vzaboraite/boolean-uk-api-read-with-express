@@ -8,4 +8,9 @@ function capitalize(text) {
   return capitalizedText;
 }
 
-module.exports = { capitalize };
+function splitAndJoin(text) {
+  const splittedAndJoined = text.split("-").join(" ");
+  return splittedAndJoined;
+}
+
+module.exports = { capitalize, splitAndJoin };
