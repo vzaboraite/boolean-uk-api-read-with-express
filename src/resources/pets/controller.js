@@ -1,3 +1,4 @@
+const { ReadyForQueryMessage } = require("pg-protocol/dist/messages");
 const db = require("../../utils/database");
 
 const createOne = async (req, res) => {
@@ -62,8 +63,26 @@ const getOneById = async (req, res) => {
   }
 };
 
+const getTypes = async (req, res) => {
+  const getTypesSQL = `
+  SELECT DISTINCT type
+  FROM pets
+  `;
+
+  try {
+    const result = await db.query(getTypesSQL);
+
+    res.json({ data: result.rows });
+  } catch (error) {
+    console.error({ error: error.message });
+
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   createOne,
   getAll,
   getOneById,
+  getTypes,
 };
