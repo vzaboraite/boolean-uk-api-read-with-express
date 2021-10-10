@@ -4,8 +4,8 @@ const {
   createOne,
   getAll,
   getOneById,
-  getFiction,
-  getNonFiction,
+  getFictionBooks,
+  getNonFictionBooks,
   getAuthorBooks,
 } = require("./controller");
 
@@ -15,9 +15,9 @@ router.post("/", createOne);
 
 router.get("/", getAll);
 
-router.get("/fiction", getFiction);
+router.get("/fiction", getFictionBooks);
 
-router.get("/non-fiction", getNonFiction);
+router.get("/non-fiction", getNonFictionBooks);
 
 router.get("/author/:name", getAuthorBooks);
 

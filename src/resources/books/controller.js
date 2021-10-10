@@ -36,12 +36,12 @@ const createOne = async (req, res) => {
 };
 
 const getAll = async (req, res) => {
-  const getAllSql = `
+  const getAllSQL = `
     SELECT * 
     FROM books
   `;
   try {
-    const result = await db.query(getAllSql);
+    const result = await db.query(getAllSQL);
 
     res.json({ data: result.rows });
   } catch (error) {
@@ -54,14 +54,14 @@ const getAll = async (req, res) => {
 const getOneById = async (req, res) => {
   const { id } = req.params;
 
-  const getOneByIdSql = `
+  const getOneByIdSQL = `
   SELECT *
   FROM books
   WHERE id = $1
   `;
 
   try {
-    const result = await db.query(getOneByIdSql, [id]);
+    const result = await db.query(getOneByIdSQL, [id]);
 
     res.json({ data: result.rows[0] });
   } catch (error) {
@@ -71,24 +71,24 @@ const getOneById = async (req, res) => {
   }
 };
 
-const getFiction = async (req, res) => {
+const getFictionBooks = async (req, res) => {
   const { topic } = req.query;
 
-  let getFictionSql = `
+  let getFictionBooksSQL = `
     SELECT * 
     FROM books
     WHERE type = 'Fiction'
   `;
 
   if (topic) {
-    getFictionSql = `
-    ${getFictionSql} 
+    getFictionBooksSQL = `
+    ${getFictionBooksSQL} 
     AND topic = '${topic}'
     `;
   }
 
   try {
-    const result = await db.query(getFictionSql);
+    const result = await db.query(getFictionBooksSQL);
 
     res.json({ data: result.rows });
   } catch (error) {
@@ -98,24 +98,24 @@ const getFiction = async (req, res) => {
   }
 };
 
-const getNonFiction = async (req, res) => {
+const getNonFictionBooks = async (req, res) => {
   const { topic } = req.query;
 
-  let getNonFictionSql = `
+  let getNonFictionBooksSQL = `
     SELECT *
     FROM books
     WHERE type = 'Non-Fiction'
   `;
 
   if (topic) {
-    getNonFictionSql = `
-    ${getNonFictionSql} 
+    getNonFictionBooksSQL = `
+    ${getNonFictionBooksSQL} 
     AND topic = '${topic}'
     `;
   }
 
   try {
-    const result = await db.query(getNonFictionSql);
+    const result = await db.query(getNonFictionBooksSQL);
 
     res.json({ data: result.rows });
   } catch (error) {
@@ -130,21 +130,21 @@ const getAuthorBooks = async (req, res) => {
 
   const { order } = req.query;
 
-  let getAuthorSql = `
+  let getAuthorSQL = `
   SELECT *
   FROM books
   WHERE author = $1
   `;
 
   if (order === "recent") {
-    getAuthorSql = `
-    ${getAuthorSql}
+    getAuthorSQL = `
+    ${getAuthorSQL}
     ORDER BY publicationDate DESC
     `;
   }
 
   try {
-    const result = await db.query(getAuthorSql, [nameCapitalized]);
+    const result = await db.query(getAuthorSQL, [nameCapitalized]);
 
     res.json({ data: result.rows });
   } catch (error) {
@@ -158,7 +158,7 @@ module.exports = {
   createOne,
   getAll,
   getOneById,
-  getFiction,
-  getNonFiction,
+  getFictionBooks,
+  getNonFictionBooks,
   getAuthorBooks,
 };

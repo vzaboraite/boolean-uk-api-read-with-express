@@ -32,20 +32,20 @@ const createOne = async (req, res) => {
 
 const getAll = async (req, res) => {
   const { microchip } = req.query;
-  let getAllSql = `
+  let getAllSQL = `
   SELECT *
   FROM pets
   `;
 
   if (microchip) {
-    getAllSql = `
-  ${getAllSql}
+    getAllSQL = `
+  ${getAllSQL}
   WHERE microchip = false
   `;
   }
 
   try {
-    const result = await db.query(getAllSql);
+    const result = await db.query(getAllSQL);
 
     res.json(result.rows);
   } catch (error) {
@@ -56,14 +56,14 @@ const getAll = async (req, res) => {
 };
 
 const getOneById = async (req, res) => {
-  const getOneByIdSql = `
+  const getOneByIdSQL = `
   SELECT *
   FROM pets
   WHERE id = $1
   `;
 
   try {
-    const result = await db.query(getOneByIdSql, [req.params.id]);
+    const result = await db.query(getOneByIdSQL, [req.params.id]);
 
     res.json(result.rows[0]);
   } catch (error) {
