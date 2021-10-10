@@ -125,7 +125,7 @@ const getPetsOfType = async (req, res) => {
 
   try {
     let result = null;
-    if (splittedAndJoinedBreed) {
+    if (breed) {
       result = await db.query(getPetsOfTypeAndBreedSQL, [
         splittedAndJoinedBreed,
       ]);
