@@ -1,3 +1,4 @@
+const { capitalize } = require("../../utils/StringUtils");
 const db = require("../../utils/database");
 
 const createOne = async (req, res) => {
@@ -90,15 +91,28 @@ const getTypes = async (req, res) => {
 
 const getPetsOfType = async (req, res) => {
   const { type } = req.params;
+  const { breed } = req.query;
 
-  const getPetsOfTypeSQL = `
+  const sqlParams = [type];
+
+  let getPetsOfTypeSQL = `
   SELECT * 
   FROM pets 
-  WHERE type= $1
+  WHERE type = $1
   `;
 
+  if (breed) {
+    const transformedBreed = capitalize(breed);
+    getPetsOfTypeSQL += `
+    AND
+    breed = $2
+    `;
+
+    sqlParams.push(transformedBreed);
+  }
+
   try {
-    const result = await db.query(getPetsOfTypeSQL, [type]);
+    const result = await db.query(getPetsOfTypeSQL, sqlParams);
 
     res.json({ data: result.rows });
   } catch (error) {
