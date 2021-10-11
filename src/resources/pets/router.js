@@ -16,7 +16,7 @@ router.get("/", getAll);
 
 router.get("/types", getTypes);
 
-router.get("/:type", getPetsOfType);
+router.get("/types/:type", getPetsOfType);
 
 router.get("/:id", getOneById);
 
