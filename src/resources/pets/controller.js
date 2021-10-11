@@ -1,4 +1,3 @@
-const { ReadyForQueryMessage } = require("pg-protocol/dist/messages");
 const db = require("../../utils/database");
 
 const createOne = async (req, res) => {
