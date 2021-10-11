@@ -91,7 +91,7 @@ const getTypes = async (req, res) => {
 
 const getPetsOfType = async (req, res) => {
   const { type } = req.params;
-  const { breed } = req.query;
+  const { breed, microchip } = req.query;
 
   const sqlParams = [type];
 
@@ -109,6 +109,13 @@ const getPetsOfType = async (req, res) => {
     `;
 
     sqlParams.push(transformedBreed);
+  }
+
+  if (microchip) {
+    getPetsOfTypeSQL += `
+    AND breed = $2
+    AND microchip = false
+    `;
   }
 
   try {
