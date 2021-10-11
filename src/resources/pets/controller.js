@@ -114,8 +114,10 @@ const getPetsOfType = async (req, res) => {
   if (microchip) {
     getPetsOfTypeSQL += `
     AND breed = $2
-    AND microchip = false
+    AND microchip = $3
     `;
+
+    sqlParams.push(microchip);
   }
 
   try {
